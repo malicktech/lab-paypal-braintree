@@ -14,8 +14,11 @@ An example Braintree integration for Spring (Java).
 
 
 ```
-docker build --tag snecommerce/braintree_spring_example:latest . && docker push snecommerce/braintree_spring_example:latest
+gradlew clean build -x test && docker build --tag snecommerce/braintree_spring_example:test . && docker push snecommerce/braintree_spring_example:test
 ```
+
+> docker run -it -p 8888:8080 braintree_spring_example:test2
+> docker run -it -p 8888:8080 snecommerce/braintree_spring_example:test
 
 ## Setup Instructions
 
@@ -64,5 +67,5 @@ Sandbox transactions must be made with [sample credit card numbers](https://deve
 This code is provided as is and is only intended to be used for illustration purposes. This code is not production-ready and is not meant to be used  in a production environment. This repository is to be used as a tool to help merchants learn how to integrate with Braintree. Any use of this repository or any of its code in a production environment is highly discouraged.
 
 # ressource material
-
+ * https://developers.braintreepayments.com/start/example-integrations
 * https://github.com/braintree/braintree_spring_example

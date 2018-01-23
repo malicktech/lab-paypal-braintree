@@ -28,6 +28,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:1.5.7.RELEASE")
     compile("com.braintreepayments.gateway:braintree-java:2.73.0")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-devtools")
     testCompile("junit:junit")
     testCompile("io.rest-assured:spring-mock-mvc:3.0.3")
     testCompile("org.springframework.boot:spring-boot-starter-test:1.5.7.RELEASE")

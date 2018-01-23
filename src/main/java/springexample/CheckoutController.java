@@ -3,15 +3,8 @@ package springexample;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-import com.braintreegateway.BraintreeGateway;
-import com.braintreegateway.Result;
-import com.braintreegateway.Transaction;
-import com.braintreegateway.Transaction.Status;
-import com.braintreegateway.TransactionRequest;
-import com.braintreegateway.CreditCard;
-import com.braintreegateway.Customer;
-import com.braintreegateway.ValidationError;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +13,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.braintreegateway.BraintreeGateway;
+import com.braintreegateway.CreditCard;
+import com.braintreegateway.Customer;
+import com.braintreegateway.Result;
+import com.braintreegateway.Transaction;
+import com.braintreegateway.Transaction.Status;
+import com.braintreegateway.TransactionRequest;
+import com.braintreegateway.ValidationError;
+
 @Controller
 public class CheckoutController {
+
+    private static final Logger log = LoggerFactory.getLogger(CheckoutController.class);
 
     private BraintreeGateway gateway = Application.gateway;
 
@@ -42,7 +46,9 @@ public class CheckoutController {
 
     @RequestMapping(value = "/checkouts", method = RequestMethod.GET)
     public String checkout(Model model) {
+    	System.out.println("GET /checkouts ");
         String clientToken = gateway.clientToken().generate();
+    	log.debug("clientToken = " + clientToken);
         model.addAttribute("clientToken", clientToken);
 
         return "checkouts/new";
@@ -50,7 +56,11 @@ public class CheckoutController {
 
     @RequestMapping(value = "/checkouts", method = RequestMethod.POST)
     public String postForm(@RequestParam("amount") String amount, @RequestParam("payment_method_nonce") String nonce, Model model, final RedirectAttributes redirectAttributes) {
-        BigDecimal decimalAmount;
+    	System.out.println("POST /checkouts ");
+    	System.out.println("nonce = " + nonce);
+    	System.out.println("amount = " + amount);
+    	
+    	BigDecimal decimalAmount;
         try {
             decimalAmount = new BigDecimal(amount);
         } catch (NumberFormatException e) {
@@ -85,6 +95,7 @@ public class CheckoutController {
 
     @RequestMapping(value = "/checkouts/{transactionId}")
     public String getTransaction(@PathVariable String transactionId, Model model) {
+    	log.debug("GET Transaction ");
         Transaction transaction;
         CreditCard creditCard;
         Customer customer;
@@ -102,6 +113,13 @@ public class CheckoutController {
         model.addAttribute("transaction", transaction);
         model.addAttribute("creditCard", creditCard);
         model.addAttribute("customer", customer);
+        
+        System.out.println("TO STRING transaction ");
+        System.out.println(transaction.toString());
+        System.out.println("TO STRING creditCard ");
+        System.out.println(creditCard.toString());
+        System.out.println("TO STRING customer ");
+        System.out.println(customer.toString());
 
         return "checkouts/show";
     }
